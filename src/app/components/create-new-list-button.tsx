@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import Modal from './modal';
+import Modal from './create-new-list-modal';
 
 const CreateNewListButton = () => {
   const [isModalOpen, setModalOpen] = useState(false);

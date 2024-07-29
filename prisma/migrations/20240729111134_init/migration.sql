@@ -19,5 +19,8 @@ CREATE TABLE "Todo" (
     CONSTRAINT "Todo_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateIndex
+CREATE UNIQUE INDEX "TodoList_name_key" ON "TodoList"("name");
+
 -- AddForeignKey
 ALTER TABLE "Todo" ADD CONSTRAINT "Todo_todoListId_fkey" FOREIGN KEY ("todoListId") REFERENCES "TodoList"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

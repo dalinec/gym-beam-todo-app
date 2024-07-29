@@ -16,7 +16,7 @@ datasource db {
 
 model TodoList {
   id    String @id @default(uuid())
-  name  String
+  name  String @unique
   todos Todo[]
 }
 
