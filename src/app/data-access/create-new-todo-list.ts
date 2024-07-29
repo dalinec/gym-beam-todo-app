@@ -1,7 +1,6 @@
 'use server';
 
 import { db } from '@/db/db';
-import { formatNameForUrl } from '@/utils/utils';
 import { todoListSchema } from '@/utils/validation';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -27,14 +26,22 @@ export async function createNewTodoList(
     return { error: { name: ['A TodoList with this name already exists'] } };
   }
 
-  const formatedName = formatNameForUrl(name);
   await db.todoList.create({
     data: {
       name,
     },
   });
 
-  revalidatePath('/');
-  redirect(`/${formatedName}`);
+  const todoListId = await db.todoList.findFirst({
+    where: {
+      name,
+    },
+  });
+
+  if (todoListId) {
+    revalidatePath(`/${todoListId.id}`);
+    redirect(`/${todoListId.id}`);
+  }
+
   return {};
 }

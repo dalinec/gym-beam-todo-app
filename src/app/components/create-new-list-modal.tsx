@@ -21,7 +21,7 @@ const Modal = ({ isOpen, onClose }: ModalProps) => {
 
     const result = await createNewTodoList(name);
 
-    if (result.error) {
+    if (result?.error) {
       setError(result.error.name ? result.error.name[0] : 'An error occurred');
     } else {
       setError(null);
