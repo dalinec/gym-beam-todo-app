@@ -15,7 +15,6 @@ CREATE TABLE "Todo" (
     "dueDate" TIMESTAMP(3),
     "tags" TEXT[],
     "todoListId" TEXT NOT NULL,
-    "asd" TEXT NOT NULL,
 
     CONSTRAINT "Todo_pkey" PRIMARY KEY ("id")
 );
