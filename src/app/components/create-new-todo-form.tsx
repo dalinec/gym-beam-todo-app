@@ -248,11 +248,11 @@ const CreateNewTodoForm = ({
           disabled={isSubmitting}
         />
         <div
-          className={`${isEditing ? "flex items-center justify-between" : ""}`}
+          className={`${isEditing ? "mt-3 flex items-center justify-between" : "mt-3"}`}
         >
           <button
             type="submit"
-            className={`flex max-w-fit justify-self-start rounded-sm border border-red-200 px-2 py-1 ${
+            className={`flex max-w-fit justify-self-start rounded-lg border bg-blue-500 px-2 py-1 text-white duration-75 ease-out hover:scale-[103%] ${
               isSubmitting ? "cursor-not-allowed bg-gray-300" : ""
             }`}
             disabled={isSubmitting}
@@ -266,7 +266,7 @@ const CreateNewTodoForm = ({
           {isEditing && (
             <button
               onClick={() => setIsEditing(false)}
-              className="flex max-w-fit justify-self-start rounded-sm border border-red-200 px-2 py-1"
+              className="flex max-w-fit justify-self-start rounded-lg border bg-blue-500 px-2 py-1 text-white duration-75 ease-out hover:scale-[103%]"
             >
               Create Todo
             </button>
