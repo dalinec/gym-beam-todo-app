@@ -25,3 +25,31 @@
 .priority-low {
   @apply rounded-[6px] bg-green-300 px-2 py-px text-black;
 }
+
+input[type="radio"] {
+  @apply hidden;
+}
+
+.radio-label {
+  @apply inline-block cursor-pointer rounded border border-gray-500 px-5 py-2 transition-all;
+}
+
+.radio-label-low {
+  @apply border-green-300 bg-green-300;
+}
+.radio-label-medium {
+  @apply border-orange-300 bg-orange-300;
+}
+.radio-label-high {
+  @apply border-red-300 bg-red-300;
+}
+
+input[type="radio"]:checked + .radio-label-low {
+  @apply border-green-500 bg-green-300 text-black;
+}
+input[type="radio"]:checked + .radio-label-medium {
+  @apply border-orange-500 bg-orange-300 text-black;
+}
+input[type="radio"]:checked + .radio-label-high {
+  @apply border-red-500 bg-red-300 text-black;
+}

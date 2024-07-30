@@ -151,13 +151,13 @@ const CreateNewTodoForm = ({
       className="w-full p-3 md:max-w-[400px] md:p-5"
       onSubmit={handleSubmit}
     >
-      <div className="flex flex-col gap-3 rounded-lg border border-green-300 p-5">
+      <div className="flex flex-col gap-3 rounded-lg border border-gray-500 p-5">
         <h2 className="font-bold">
           {isEditing ? "Edit Todo" : "Create New Todo"}
         </h2>
         <label htmlFor="name">Name of the Todo</label>
         <input
-          className={`border border-green-300 px-2 py-1 ${
+          className={`rounded-md border border-gray-500 px-2 py-1 ${
             isSubmitting ? "bg-gray-200" : ""
           }`}
           type="text"
@@ -176,7 +176,7 @@ const CreateNewTodoForm = ({
           value={formData.completed.toString()}
           onChange={handleChange}
           disabled={isSubmitting}
-          className={`border border-green-300 px-2 py-1 ${
+          className={`rounded-md border border-gray-500 px-2 py-1 ${
             isSubmitting ? "bg-gray-200" : ""
           }`}
         >
@@ -184,7 +184,7 @@ const CreateNewTodoForm = ({
           <option value="true">Completed</option>
         </select>
         <label>Priority</label>
-        <div className="flex gap-3">
+        <div className="flex items-center justify-around gap-3">
           <input
             type="radio"
             name="priority"
@@ -194,7 +194,9 @@ const CreateNewTodoForm = ({
             onChange={handleChange}
             disabled={isSubmitting}
           />
-          <label htmlFor="high">High</label>
+          <label className="radio-label radio-label-high" htmlFor="high">
+            High
+          </label>
           <input
             type="radio"
             name="priority"
@@ -204,7 +206,9 @@ const CreateNewTodoForm = ({
             onChange={handleChange}
             disabled={isSubmitting}
           />
-          <label htmlFor="medium">Medium</label>
+          <label className="radio-label radio-label-medium" htmlFor="medium">
+            Medium
+          </label>
           <input
             type="radio"
             name="priority"
@@ -214,11 +218,13 @@ const CreateNewTodoForm = ({
             onChange={handleChange}
             disabled={isSubmitting}
           />
-          <label htmlFor="low">Low</label>
+          <label className="radio-label radio-label-low" htmlFor="low">
+            Low
+          </label>
         </div>
         <label htmlFor="dueDate">Due Date</label>
         <input
-          className={`border border-green-300 px-2 py-1 ${
+          className={`rounded-md border border-gray-500 px-2 py-1 ${
             isSubmitting ? "bg-gray-200" : ""
           }`}
           type="date"
@@ -230,7 +236,7 @@ const CreateNewTodoForm = ({
         />
         <label htmlFor="tags">Tags (comma separated)</label>
         <input
-          className={`border border-green-300 px-2 py-1 ${
+          className={`rounded-md border border-gray-500 px-2 py-1 ${
             isSubmitting ? "bg-gray-200" : ""
           }`}
           type="text"
