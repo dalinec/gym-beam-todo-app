@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 interface CreateNewTodoFormProps {
   todoListId: string;
-  onTodoCreated: () => void;
+  onTodoCreated: (newTodoId: string) => void;
 }
 
 const CreateNewTodoForm = ({
@@ -49,7 +49,7 @@ const CreateNewTodoForm = ({
       const createdTodo = await response.json();
       console.log('Todo created:', createdTodo);
 
-      onTodoCreated();
+      onTodoCreated(createdTodo.id);
 
       form.querySelectorAll('input, select').forEach((input) => {
         (input as HTMLInputElement).value = '';
@@ -63,7 +63,10 @@ const CreateNewTodoForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      className='w-full md:max-w-[400px] p-3 md:p-5'
+      onSubmit={handleSubmit}
+    >
       <div className='flex flex-col gap-3 border border-green-300 rounded-lg p-5'>
         <label htmlFor='name'>Name of the Todo</label>
         <input
@@ -109,6 +112,7 @@ const CreateNewTodoForm = ({
           type='date'
           name='dueDate'
           disabled={isSubmitting}
+          required
         />
         <label htmlFor='tags'>Tags (comma separated)</label>
         <input
