@@ -64,6 +64,11 @@ const CreateNewTodoForm = ({
         ...prevData,
         [name]: checked,
       }));
+    } else if (name === "completed") {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value === "true",
+      }));
     } else {
       setFormData((prevData) => ({
         ...prevData,
