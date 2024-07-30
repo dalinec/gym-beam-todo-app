@@ -1,7 +1,7 @@
 import { db } from "@/db/db";
 import CreateNewListButton from "./components/create-new-list-button";
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, NotepadText } from "lucide-react";
 
 export default async function Home() {
   const allTodolists = await db.todoList.findMany({
@@ -18,7 +18,12 @@ export default async function Home() {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col items-center justify-start gap-10 p-5 md:p-12">
       <div className="flex w-full flex-col justify-between gap-5 md:flex-row">
-        <h1 className="text-5xl font-semibold">My todo lists.</h1>
+        <h1 className="flex items-center justify-center gap-x-3 text-5xl font-semibold">
+          My todo lists{" "}
+          <span>
+            <NotepadText className="size-10" />
+          </span>
+        </h1>
         <CreateNewListButton />
       </div>
       <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">

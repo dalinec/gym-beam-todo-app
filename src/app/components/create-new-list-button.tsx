@@ -12,7 +12,7 @@ const CreateNewListButton = () => {
     <div>
       <button
         onClick={handleOpenModal}
-        className="rounded bg-blue-500 px-4 py-2 text-white"
+        className="rounded bg-blue-500 px-4 py-2 text-white duration-100 ease-in hover:scale-[103%]"
       >
         Create New List
       </button>
