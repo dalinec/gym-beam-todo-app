@@ -1,22 +1,24 @@
-'use client';
+"use client";
 
-import { CSSProperties, useEffect, useState } from 'react';
-import CreateNewTodoForm from '../components/create-new-todo-form';
-import TodoItem from '../components/todo-item';
-import Link from 'next/link';
-import { Todo, TodoList } from '@/types/todos';
-import { getTodoListWithTodos } from '../data-access/get-todo-list-with-todos';
-import { deleteTodo } from '../data-access/delete-todo';
-import { updateTodoCompleted } from '../data-access/todo-completed-state';
-import { HashLoader } from 'react-spinners';
+import { CSSProperties, useEffect, useState } from "react";
+import CreateNewTodoForm from "../components/create-new-todo-form";
+import TodoItem from "../components/todo-item";
+import Link from "next/link";
+import { Todo, TodoList } from "@/types/todos";
+import { getTodoListWithTodos } from "../data-access/get-todo-list-with-todos";
+import { deleteTodo } from "../data-access/delete-todo";
+import { updateTodoCompleted } from "../data-access/todo-completed-state";
+import { HashLoader } from "react-spinners";
+import { deleteTodoList } from "../data-access/delete-todo-list";
+import { House, Trash2 } from "lucide-react";
 
 interface TodoPageProps {
   params: { todo: string };
 }
 
 const override: CSSProperties = {
-  display: 'block',
-  margin: '0 auto',
+  display: "block",
+  margin: "0 auto",
 };
 
 const TodoPage = ({ params }: TodoPageProps) => {
@@ -33,10 +35,10 @@ const TodoPage = ({ params }: TodoPageProps) => {
       if (todoListData) {
         setTodoList(todoListData);
       } else {
-        setError('Todo List not found.');
+        setError("Todo List not found.");
       }
     } catch (err) {
-      setError('Failed to fetch todo list.');
+      setError("Failed to fetch todo list.");
     }
   };
 
@@ -59,7 +61,7 @@ const TodoPage = ({ params }: TodoPageProps) => {
       await updateTodoCompleted(todoId, completed);
       await fetchTodoList();
     } catch (err) {
-      setError('Failed to update todo.');
+      setError("Failed to update todo.");
     } finally {
       setLoadingTodoId(null);
     }
@@ -76,10 +78,14 @@ const TodoPage = ({ params }: TodoPageProps) => {
       await deleteTodo(todoId);
       await fetchTodoList();
     } catch (error) {
-      setError('Failed to delete todo.');
+      setError("Failed to delete todo.");
     } finally {
       setLoadingTodoId(null);
     }
+  };
+
+  const handleDeleteTodoList = async (todolistId: string) => {
+    await deleteTodoList(todolistId);
   };
 
   if (error) {
@@ -88,30 +94,40 @@ const TodoPage = ({ params }: TodoPageProps) => {
 
   if (!todoList) {
     return (
-      <div className='min-h-screen w-full flex items-center justify-center'>
+      <div className="flex min-h-screen w-full items-center justify-center">
         <HashLoader size={60} cssOverride={override} />
       </div>
     );
   }
 
+  const sortedTodos = todoList.todos.sort(
+    (a, b) => Number(a.completed) - Number(b.completed),
+  );
+
   return (
     <>
-      <h1 className='flex relative p-3 md:p-5 items-center justify-center w-full mt-10 font-bold text-5xl'>
-        Todo List: {todoList.name}
-        <Link
-          href={'/'}
-          className='absolute top-0 hidden md:block hover:scale-105 ease-in duration-100 text-lg bg-green-300 px-2 py-1 rounded-lg left-10'
-        >
-          back
-        </Link>
-      </h1>
-      <Link
-        href={'/'}
-        className='md:hidden m-3 hover:scale-105 ease-in duration-100 text-lg bg-green-300 px-2 py-1 rounded-lg left-10'
-      >
-        back
-      </Link>
-      <div className='flex flex-col md:flex-row w-full max-w-7xl mx-auto gap-10 mt-10 md:mt-16'>
+      <div className="mx-auto mt-10 flex w-full max-w-7xl flex-col items-start justify-between md:flex-row md:items-center">
+        <h1 className="p-3 text-5xl font-bold md:p-5">
+          Todo List: {todoList.name}
+        </h1>
+        {/* btns */}
+        <div className="flex w-full max-w-fit items-center justify-center gap-3 p-3 md:p-5">
+          <Link
+            href={"/"}
+            className="rounded-lg bg-green-300 px-4 py-2 text-lg font-medium duration-100 ease-in hover:scale-105"
+          >
+            <House />
+          </Link>
+          <button
+            onClick={() => handleDeleteTodoList(todo)}
+            className="rounded-lg bg-red-300 px-4 py-2 text-lg font-medium duration-100 ease-in hover:scale-105"
+          >
+            <Trash2 />
+          </button>
+        </div>
+      </div>
+
+      <div className="mx-auto mt-10 flex w-full max-w-7xl flex-col gap-10 md:mt-16 md:flex-row">
         <CreateNewTodoForm
           todoListId={todoList.id}
           onTodoCreatedOrUpdated={handleTodoCreatedOrUpdated}
@@ -119,12 +135,14 @@ const TodoPage = ({ params }: TodoPageProps) => {
           isEditing={isEditing}
           setIsEditing={setIsEditing}
         />
-        <div className='flex flex-col w-full p-3 md:p-5'>
-          {todoList.todos.length === 0 ? (
-            <div>No todos listed. </div>
+        <div className="flex w-full flex-col p-3 md:p-5">
+          {sortedTodos.length === 0 ? (
+            <div className="mb-16 flex h-full items-center justify-center text-xl font-bold md:text-3xl lg:text-5xl">
+              No todos listed.{" "}
+            </div>
           ) : (
-            <ul>
-              {todoList.todos.map((todo) => (
+            <ul className="mb-16">
+              {sortedTodos.map((todo) => (
                 <TodoItem
                   key={todo.id}
                   todo={todo}

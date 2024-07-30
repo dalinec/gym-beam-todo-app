@@ -1,6 +1,6 @@
-'use server';
+"use server";
 
-import { db } from '@/db/db';
+import { db } from "@/db/db";
 
 interface NewTodo {
   name: string;
@@ -22,6 +22,6 @@ export async function updateTodo(id: string, newTodo: NewTodo) {
     });
     return updatedTodo;
   } else {
-    console.error('No todo with the provided id found.');
+    console.error("No todo with the provided id found.");
   }
 }

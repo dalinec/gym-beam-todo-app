@@ -1,6 +1,6 @@
-'use client';
-import React, { useState } from 'react';
-import Modal from './create-new-list-modal';
+"use client";
+import React, { useState } from "react";
+import Modal from "./create-new-list-modal";
 
 const CreateNewListButton = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -12,7 +12,7 @@ const CreateNewListButton = () => {
     <div>
       <button
         onClick={handleOpenModal}
-        className='px-4 py-2 bg-blue-500 text-white rounded'
+        className="rounded bg-blue-500 px-4 py-2 text-white"
       >
         Create New List
       </button>

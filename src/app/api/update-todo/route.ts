@@ -1,5 +1,5 @@
-import { updateTodo } from '@/app/data-access/update-todo';
-import { NextRequest, NextResponse } from 'next/server';
+import { updateTodo } from "@/app/data-access/update-todo";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(request: NextRequest) {
   try {
@@ -10,10 +10,10 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json(todo);
   } catch (error) {
-    console.error('Error creating todo:', error);
+    console.error("Error creating todo:", error);
     return NextResponse.json(
-      { error: 'Internal Server Error' },
-      { status: 500 }
+      { error: "Internal Server Error" },
+      { status: 500 },
     );
   }
 }

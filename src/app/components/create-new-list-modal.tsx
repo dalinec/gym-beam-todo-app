@@ -30,8 +30,8 @@ const Modal = ({ isOpen, onClose }: ModalProps) => {
   };
 
   return (
-    <div className='fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50'>
-      <div className='bg-white relative p-6 rounded-lg shadow-lg w-full max-w-md'>
+    <div className='fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50'>
+      <div className='bg-white relative p-6 rounded-lg shadow-lg '>
         <button
           onClick={onClose}
           className='absolute top-2 right-2 text-gray-600 hover:text-gray-800'
@@ -50,6 +50,7 @@ const Modal = ({ isOpen, onClose }: ModalProps) => {
               name='name'
               id='name'
               placeholder='Name'
+              required
             />
             <button
               type='submit'
