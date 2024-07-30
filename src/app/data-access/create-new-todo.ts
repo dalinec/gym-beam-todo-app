@@ -1,7 +1,7 @@
-'use server';
+"use server";
 
-import { db } from '@/db/db';
-import { revalidatePath } from 'next/cache';
+import { db } from "@/db/db";
+import { revalidatePath } from "next/cache";
 
 interface NewTodo {
   name: string;
@@ -30,11 +30,12 @@ export async function createNewTodo(todoListId: string, newTodo: NewTodo) {
       },
     });
 
-    revalidatePath(`/${todoListId}`, 'page');
+    revalidatePath(`/${todoListId}`, "page");
+    revalidatePath("/", "page");
 
     return createdTodo;
   } catch (error) {
-    console.error('Error creating todo:', error);
+    console.error("Error creating todo:", error);
     throw error;
   }
 }

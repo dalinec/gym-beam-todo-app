@@ -28,7 +28,7 @@ export default async function Home() {
             key={i}
             href={`/${todoList.id}`}
           >
-            <div className="min-h-[200px] rounded-lg border border-slate-300 p-6">
+            <div className="min-h-[200px] rounded-lg border border-blue-500 bg-slate-100 p-6 shadow-md">
               <h2 className="mb-2 font-semibold">{todoList.name}</h2>
               <ul>
                 {todoList.todos.slice(0, 4).map((todo, j) => (

@@ -1,7 +1,14 @@
 "use client";
 
-import { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import {
+  useState,
+  useEffect,
+  ChangeEvent,
+  FormEvent,
+  startTransition,
+} from "react";
 import { Todo } from "@/types/todos";
+import { useRouter } from "next/navigation";
 
 interface CreateNewTodoFormProps {
   todoListId: string;
@@ -27,6 +34,7 @@ const CreateNewTodoForm = ({
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (isEditing && editingTodo) {
@@ -143,6 +151,9 @@ const CreateNewTodoForm = ({
       setError("An unexpected error occurred.");
     } finally {
       setIsSubmitting(false);
+      startTransition(() => {
+        router.refresh();
+      });
     }
   };
 

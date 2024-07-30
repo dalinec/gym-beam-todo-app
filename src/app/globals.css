@@ -16,6 +16,10 @@
   }
 }
 
+body {
+  @apply bg-slate-200;
+}
+
 .priority-high {
   @apply rounded-[6px] bg-red-300 px-2 py-px text-black;
 }
@@ -45,11 +49,11 @@ input[type="radio"] {
 }
 
 input[type="radio"]:checked + .radio-label-low {
-  @apply border-green-500 bg-green-300 text-black;
+  @apply border-green-500 bg-green-300 text-black shadow-md;
 }
 input[type="radio"]:checked + .radio-label-medium {
-  @apply border-orange-500 bg-orange-300 text-black;
+  @apply border-orange-500 bg-orange-300 text-black shadow-md;
 }
 input[type="radio"]:checked + .radio-label-high {
-  @apply border-red-500 bg-red-300 text-black;
+  @apply border-red-500 bg-red-300 text-black shadow-md;
 }
