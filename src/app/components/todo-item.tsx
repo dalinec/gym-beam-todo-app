@@ -51,7 +51,11 @@ const TodoItem = ({
                 {todo.name}
               </div>
               <div className="text-sm text-gray-600">
-                Priority: {todo.priority} - Due:{" "}
+                Priority:{" "}
+                <span className={`priority-${todo.priority}`}>
+                  {todo.priority}
+                </span>{" "}
+                - Due:{" "}
                 {todo.dueDate
                   ? new Date(todo.dueDate).toLocaleDateString("en-GB")
                   : "No due date"}

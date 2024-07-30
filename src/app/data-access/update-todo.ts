@@ -5,7 +5,7 @@ import { db } from "@/db/db";
 interface NewTodo {
   name: string;
   completed: boolean;
-  priority: number;
+  priority: string;
   dueDate: Date | null;
   tags: string[];
 }

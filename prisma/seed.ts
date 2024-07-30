@@ -12,14 +12,14 @@ async function main() {
           {
             name: 'Buy groceries',
             completed: false,
-            priority: 1,
+            priority: "high",
             dueDate: new Date('2024-07-30'),
             tags: ['shopping', 'urgent'],
           },
           {
             name: 'Read a book',
             completed: false,
-            priority: 2,
+            priority: "low",
             dueDate: new Date('2024-08-01'),
             tags: ['leisure'],
           },
@@ -36,14 +36,14 @@ async function main() {
           {
             name: 'Finish report',
             completed: false,
-            priority: 1,
+            priority: "medium",
             dueDate: new Date('2024-07-31'),
             tags: ['work', 'urgent'],
           },
           {
             name: 'Plan meeting agenda',
             completed: false,
-            priority: 2,
+            priority: "low",
             dueDate: new Date('2024-08-02'),
             tags: ['work', 'planning'],
           },

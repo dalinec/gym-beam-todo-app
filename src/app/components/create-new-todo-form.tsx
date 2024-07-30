@@ -21,7 +21,7 @@ const CreateNewTodoForm = ({
   const [formData, setFormData] = useState({
     name: "",
     completed: false,
-    priority: 1,
+    priority: "low",
     dueDate: "" as string,
     tags: [] as string[],
   });
@@ -48,7 +48,7 @@ const CreateNewTodoForm = ({
     setFormData({
       name: "",
       completed: false,
-      priority: 1,
+      priority: "low",
       dueDate: "",
       tags: [],
     });
@@ -135,7 +135,7 @@ const CreateNewTodoForm = ({
         }
 
         const result = await response.json();
-        onTodoCreatedOrUpdated(result.id); // Pass ID of created todo
+        onTodoCreatedOrUpdated(result.id);
         resetForm();
       }
     } catch (error) {
@@ -183,20 +183,39 @@ const CreateNewTodoForm = ({
           <option value="false">Not Completed</option>
           <option value="true">Completed</option>
         </select>
-        <label htmlFor="priority">Priority</label>
-        <input
-          className={`border border-green-300 px-2 py-1 ${
-            isSubmitting ? "bg-gray-200" : ""
-          }`}
-          type="number"
-          name="priority"
-          id="priority"
-          placeholder="Priority"
-          value={formData.priority}
-          onChange={handleChange}
-          required
-          disabled={isSubmitting}
-        />
+        <label>Priority</label>
+        <div className="flex gap-3">
+          <input
+            type="radio"
+            name="priority"
+            value="high"
+            id="high"
+            checked={formData.priority === "high"}
+            onChange={handleChange}
+            disabled={isSubmitting}
+          />
+          <label htmlFor="high">High</label>
+          <input
+            type="radio"
+            name="priority"
+            value="medium"
+            id="medium"
+            checked={formData.priority === "medium"}
+            onChange={handleChange}
+            disabled={isSubmitting}
+          />
+          <label htmlFor="medium">Medium</label>
+          <input
+            type="radio"
+            name="priority"
+            value="low"
+            id="low"
+            checked={formData.priority === "low"}
+            onChange={handleChange}
+            disabled={isSubmitting}
+          />
+          <label htmlFor="low">Low</label>
+        </div>
         <label htmlFor="dueDate">Due Date</label>
         <input
           className={`border border-green-300 px-2 py-1 ${

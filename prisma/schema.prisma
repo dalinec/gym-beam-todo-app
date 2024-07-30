@@ -18,7 +18,7 @@ model Todo {
   id         String    @id @default(uuid())
   name       String
   completed  Boolean   @default(false)
-  priority   Int
+  priority   String
   dueDate    DateTime?
   tags       String[]
   todoListId String

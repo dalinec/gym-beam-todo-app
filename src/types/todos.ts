@@ -2,7 +2,7 @@ export interface Todo {
   id: string;
   name: string;
   completed: boolean;
-  priority: number;
+  priority: string;
   dueDate: Date | null;
   tags: string[];
   todoListId: string;

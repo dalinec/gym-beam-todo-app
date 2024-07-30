@@ -16,5 +16,12 @@
   }
 }
 
-body {
+.priority-high {
+  @apply rounded-[6px] bg-red-300 px-2 py-px text-black;
+}
+.priority-medium {
+  @apply rounded-[6px] bg-orange-300 px-2 py-px text-black;
+}
+.priority-low {
+  @apply rounded-[6px] bg-green-300 px-2 py-px text-black;
 }
