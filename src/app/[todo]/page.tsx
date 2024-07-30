@@ -1,16 +1,16 @@
 "use client";
 
+import { Todo, TodoList } from "@/types/todos";
+import { House, NotepadText, Trash2 } from "lucide-react";
+import Link from "next/link";
 import { CSSProperties, useEffect, useState } from "react";
+import { HashLoader } from "react-spinners";
 import CreateNewTodoForm from "../components/create-new-todo-form";
 import TodoItem from "../components/todo-item";
-import Link from "next/link";
-import { Todo, TodoList } from "@/types/todos";
-import { getTodoListWithTodos } from "../data-access/get-todo-list-with-todos";
 import { deleteTodo } from "../data-access/delete-todo";
-import { updateTodoCompleted } from "../data-access/todo-completed-state";
-import { HashLoader } from "react-spinners";
 import { deleteTodoList } from "../data-access/delete-todo-list";
-import { House, NotepadText, Trash2 } from "lucide-react";
+import { getTodoListWithTodos } from "../data-access/get-todo-list-with-todos";
+import { updateTodoCompleted } from "../data-access/todo-completed-state";
 
 interface TodoPageProps {
   params: { todo: string };

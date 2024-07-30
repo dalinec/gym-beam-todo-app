@@ -1,6 +1,7 @@
-'use server';
+"use server";
 
-import { db } from '@/db/db';
+import { db } from "@/db/db";
+import { revalidatePath } from "next/cache";
 
 export async function deleteTodo(todoId: string) {
   try {
@@ -10,6 +11,7 @@ export async function deleteTodo(todoId: string) {
       },
     });
   } catch (error) {
-    console.error('Error deleting todo:', error);
+    console.error("Error deleting todo:", error);
   }
+  revalidatePath("/", "page");
 }
