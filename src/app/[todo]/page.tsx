@@ -1,13 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getTodoListWithTodos } from '../data-access/get-todo-list-with-todos';
 import CreateNewTodoForm from '../components/create-new-todo-form';
 import TodoItem from '../components/todo-item';
 import Link from 'next/link';
-import { TodoList, Todo } from '@/types/todos';
+import { Todo, TodoList } from '@/types/todos';
+import { getTodoListWithTodos } from '../data-access/get-todo-list-with-todos';
 import { deleteTodo } from '../data-access/delete-todo';
-import { updateTodoCompleted } from '../components/todo-completed-state';
+import { updateTodoCompleted } from '../data-access/todo-completed-state';
 
 interface TodoPageProps {
   params: { todo: string };
@@ -18,6 +18,8 @@ const TodoPage = ({ params }: TodoPageProps) => {
   const [todoList, setTodoList] = useState<TodoList | null>(null);
   const [loadingNewTodo, setLoadingNewTodo] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   const fetchTodoList = async () => {
     try {
@@ -36,10 +38,11 @@ const TodoPage = ({ params }: TodoPageProps) => {
     fetchTodoList();
   }, [todo]);
 
-  const handleTodoCreated = async () => {
+  const handleTodoCreatedOrUpdated = async () => {
     setLoadingNewTodo(true);
     await fetchTodoList();
     setLoadingNewTodo(false);
+    setEditingTodo(null);
   };
 
   const handleToggleCompleted = async (todoId: string, completed: boolean) => {
@@ -51,8 +54,9 @@ const TodoPage = ({ params }: TodoPageProps) => {
     }
   };
 
-  const handleEditTodo = (todoId: string) => {
-    // Implement the logic to edit a todo
+  const handleEditTodo = (todo: Todo) => {
+    setEditingTodo(todo);
+    setIsEditing(true);
   };
 
   const handleDeleteTodo = async (todoId: string) => {
@@ -96,7 +100,10 @@ const TodoPage = ({ params }: TodoPageProps) => {
       <div className='flex flex-col md:flex-row w-full max-w-7xl mx-auto gap-10 mt-10 md:mt-16'>
         <CreateNewTodoForm
           todoListId={todoList.id}
-          onTodoCreated={handleTodoCreated}
+          onTodoCreatedOrUpdated={handleTodoCreatedOrUpdated}
+          editingTodo={editingTodo}
+          isEditing={isEditing}
+          setIsEditing={setIsEditing}
         />
         <div className='flex flex-col w-full p-3 md:p-5'>
           {todoList.todos.length === 0 ? (

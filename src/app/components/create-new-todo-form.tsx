@@ -1,59 +1,109 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Todo } from '@/types/todos';
 
 interface CreateNewTodoFormProps {
   todoListId: string;
-  onTodoCreated: (newTodoId: string) => void;
+  onTodoCreatedOrUpdated: (newTodoId?: string) => void;
+  editingTodo?: Todo | null;
+  isEditing: boolean;
+  setIsEditing: (isEditing: boolean) => void;
 }
 
 const CreateNewTodoForm = ({
   todoListId,
-  onTodoCreated,
+  onTodoCreatedOrUpdated,
+  editingTodo,
+  isEditing,
+  setIsEditing,
 }: CreateNewTodoFormProps) => {
+  const [name, setName] = useState('');
+  const [completed, setCompleted] = useState(false);
+  const [priority, setPriority] = useState(1);
+  const [dueDate, setDueDate] = useState<string | null>(null);
+  const [tags, setTags] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isEditing && editingTodo) {
+      setName(editingTodo.name);
+      setCompleted(editingTodo.completed);
+      setPriority(editingTodo.priority);
+      setDueDate(
+        editingTodo.dueDate
+          ? new Date(editingTodo.dueDate).toISOString().split('T')[0]
+          : null
+      );
+      setTags(editingTodo.tags);
+    } else {
+      resetForm();
+    }
+  }, [isEditing, editingTodo]);
+
+  const resetForm = () => {
+    setName('');
+    setCompleted(false);
+    setPriority(1);
+    setDueDate(null);
+    setTags([]);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
 
-    const form = e.currentTarget as HTMLFormElement;
-    const formData = new FormData(form);
     const newTodo = {
-      name: formData.get('name') as string,
-      completed: formData.get('completed') === 'true',
-      priority: parseInt(formData.get('priority') as string, 10),
-      dueDate: formData.get('dueDate')
-        ? new Date(formData.get('dueDate') as string)
-        : null,
-      tags: (formData.get('tags') as string)
-        .split(',')
-        .map((tag) => tag.trim()),
+      name,
+      completed,
+      priority,
+      dueDate: dueDate ? new Date(dueDate) : null,
+      tags,
     };
 
     try {
-      const response = await fetch('/api/create-todo', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ newTodo, todoListId }),
-      });
+      if (isEditing && editingTodo) {
+        const response = await fetch('/api/update-todo', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: editingTodo.id,
+            updatedTodo: newTodo,
+          }),
+        });
 
-      if (!response.ok) {
-        throw new Error('Failed to create todo');
+        if (!response.ok) {
+          throw new Error(`Failed to update todo`);
+        }
+
+        const result = await response.json();
+        onTodoCreatedOrUpdated(result.id);
+        resetForm();
+        setIsEditing(false);
+      } else {
+        const response = await fetch('/api/create-todo', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            newTodo,
+            todoListId,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to create todo`);
+        }
+
+        const result = await response.json();
+        onTodoCreatedOrUpdated(result.id);
+        resetForm();
       }
-
-      const createdTodo = await response.json();
-      console.log('Todo created:', createdTodo);
-
-      onTodoCreated(createdTodo.id);
-
-      form.querySelectorAll('input, select').forEach((input) => {
-        (input as HTMLInputElement).value = '';
-      });
     } catch (error) {
       console.error(error);
       setError('An unexpected error occurred.');
@@ -77,6 +127,8 @@ const CreateNewTodoForm = ({
           name='name'
           id='name'
           placeholder='Name'
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           required
           disabled={isSubmitting}
         />
@@ -84,6 +136,8 @@ const CreateNewTodoForm = ({
         <select
           name='completed'
           id='completed'
+          value={completed.toString()}
+          onChange={(e) => setCompleted(e.target.value === 'true')}
           disabled={isSubmitting}
           className={`border border-green-300 px-2 py-1 ${
             isSubmitting ? 'bg-gray-200' : ''
@@ -101,6 +155,8 @@ const CreateNewTodoForm = ({
           name='priority'
           id='priority'
           placeholder='Priority'
+          value={priority}
+          onChange={(e) => setPriority(parseInt(e.target.value, 10))}
           required
           disabled={isSubmitting}
         />
@@ -111,8 +167,9 @@ const CreateNewTodoForm = ({
           }`}
           type='date'
           name='dueDate'
+          value={dueDate ?? ''}
+          onChange={(e) => setDueDate(e.target.value)}
           disabled={isSubmitting}
-          required
         />
         <label htmlFor='tags'>Tags (comma separated)</label>
         <input
@@ -123,6 +180,10 @@ const CreateNewTodoForm = ({
           name='tags'
           id='tags'
           placeholder='Tags'
+          value={tags.join(', ')}
+          onChange={(e) =>
+            setTags(e.target.value.split(',').map((tag) => tag.trim()))
+          }
           disabled={isSubmitting}
         />
         <button
@@ -132,7 +193,11 @@ const CreateNewTodoForm = ({
           }`}
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Submitting...' : 'Submit'}
+          {isSubmitting
+            ? 'Submitting...'
+            : isEditing
+            ? 'Update Todo'
+            : 'Create Todo'}
         </button>
         {error && <p className='text-red-500'>{error}</p>}
       </div>

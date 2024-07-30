@@ -5,7 +5,7 @@ interface TodoItemProps {
   todo: Todo;
   onToggleCompleted: (todoId: string, completed: boolean) => void;
   onDeleteTodo: (todoId: string) => void;
-  onEditTodo: (todoId: string) => void;
+  onEditTodo: (todo: Todo) => void;
   loadingNewTodo: boolean;
 }
 
@@ -53,7 +53,7 @@ const TodoItem = ({
           </div>
           <div className='flex items-center gap-2'>
             <button
-              onClick={() => onEditTodo(todo.id)}
+              onClick={() => onEditTodo(todo)}
               className='text-blue-500 hover:text-blue-700'
             >
               <Pencil />
