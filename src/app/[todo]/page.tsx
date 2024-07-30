@@ -10,7 +10,7 @@ import { deleteTodo } from "../data-access/delete-todo";
 import { updateTodoCompleted } from "../data-access/todo-completed-state";
 import { HashLoader } from "react-spinners";
 import { deleteTodoList } from "../data-access/delete-todo-list";
-import { House, Trash2 } from "lucide-react";
+import { House, NotepadText, Trash2 } from "lucide-react";
 
 interface TodoPageProps {
   params: { todo: string };
@@ -107,8 +107,11 @@ const TodoPage = ({ params }: TodoPageProps) => {
   return (
     <>
       <div className="mx-auto mt-10 flex w-full max-w-7xl flex-col items-start justify-between md:flex-row md:items-center">
-        <h1 className="p-3 text-5xl font-bold md:p-5">
-          Todo List: {todoList.name}
+        <h1 className="flex items-center justify-center gap-x-3 p-3 text-5xl font-bold md:p-5">
+          {todoList.name}{" "}
+          <span>
+            <NotepadText className="size-10" />
+          </span>
         </h1>
         {/* btns */}
         <div className="flex w-full max-w-fit items-center justify-center gap-3 p-3 md:p-5">
@@ -127,7 +130,7 @@ const TodoPage = ({ params }: TodoPageProps) => {
         </div>
       </div>
 
-      <div className="mx-auto mt-10 flex w-full max-w-7xl flex-col gap-10 md:mt-16 md:flex-row">
+      <div className="mx-auto mt-5 flex w-full max-w-7xl flex-col gap-2 md:mt-16 md:flex-row md:gap-10">
         <CreateNewTodoForm
           todoListId={todoList.id}
           onTodoCreatedOrUpdated={handleTodoCreatedOrUpdated}

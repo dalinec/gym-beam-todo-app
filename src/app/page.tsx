@@ -8,6 +8,9 @@ export default async function Home() {
     include: {
       todos: true,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
   const maxVisibleItems = 4;
@@ -16,10 +19,10 @@ export default async function Home() {
   const moreItemsCount = allTodolists.length - maxVisibleItems;
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col items-center justify-start gap-10 p-5 md:p-12">
-      <div className="flex w-full flex-col justify-between gap-5 md:flex-row">
-        <h1 className="flex items-center justify-center gap-x-3 text-5xl font-semibold">
-          My todo lists{" "}
+    <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col items-center justify-start gap-10 p-5 md:p-10">
+      <div className="flex w-full flex-col justify-between gap-5 py-3 md:flex-row md:py-5">
+        <h1 className="flex items-center justify-start gap-x-3 text-5xl font-semibold md:justify-center">
+          Todo lists{" "}
           <span>
             <NotepadText className="size-10" />
           </span>

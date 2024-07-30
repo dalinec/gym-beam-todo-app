@@ -55,18 +55,25 @@ const TodoItem = ({
                 <span className={`priority-${todo.priority}`}>
                   {todo.priority}
                 </span>{" "}
-                - Due:{" "}
-                <span className="font-semibold">
-                  {todo.dueDate
-                    ? new Date(todo.dueDate).toLocaleDateString("en-GB")
-                    : "No due date"}
+                <span className="inline-block">
+                  <span> - </span>
+                  Due:{" "}
+                  <span className="font-semibold">
+                    {todo.dueDate
+                      ? new Date(todo.dueDate).toLocaleDateString("en-GB")
+                      : "No due date"}
+                  </span>
                 </span>
               </div>
               <div className="max-w-[200px] truncate text-ellipsis text-sm text-gray-600 sm:max-w-full">
                 {todo.tags.length === 1 && todo.tags.includes("") ? (
                   <span>No tags</span>
                 ) : (
-                  <span> Tags: {todo.tags.join(", ")}</span>
+                  <span>
+                    {" "}
+                    <span className="font-medium underline">Tags:</span>{" "}
+                    {todo.tags.join(", ")}
+                  </span>
                 )}
               </div>
             </div>

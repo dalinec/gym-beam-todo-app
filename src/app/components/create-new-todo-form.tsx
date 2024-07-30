@@ -162,7 +162,7 @@ const CreateNewTodoForm = ({
       className="w-full p-3 md:max-w-[400px] md:p-5"
       onSubmit={handleSubmit}
     >
-      <div className="flex flex-col gap-3 rounded-lg border border-gray-500 p-5">
+      <div className="flex flex-col gap-3 rounded-lg border border-gray-500 p-5 shadow-md">
         <h2 className="font-bold">
           {isEditing ? "Edit Todo" : "Create New Todo"}
         </h2>

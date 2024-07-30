@@ -9,9 +9,10 @@ datasource db {
 }
 
 model TodoList {
-  id    String @id @default(uuid())
-  name  String @unique
-  todos Todo[]
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  todos     Todo[]
 }
 
 model Todo {
