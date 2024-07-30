@@ -1,5 +1,4 @@
 "use client";
-
 import { Todo, TodoList } from "@/types/todos";
 import { House, NotepadText, Trash2 } from "lucide-react";
 import Link from "next/link";
@@ -28,6 +27,8 @@ const TodoPage = ({ params }: TodoPageProps) => {
   const [error, setError] = useState<string | null>(null);
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [filter, setFilter] = useState<string>("all");
+  const [priorityFilter, setPriorityFilter] = useState<string>("all");
 
   const fetchTodoList = async () => {
     try {
@@ -88,6 +89,33 @@ const TodoPage = ({ params }: TodoPageProps) => {
     await deleteTodoList(todolistId);
   };
 
+  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilter(e.target.value);
+  };
+
+  const handlePriorityFilterChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    setPriorityFilter(e.target.value);
+  };
+
+  const filteredTodos = todoList
+    ? todoList.todos
+        .filter((todo) => {
+          if (filter === "all") return true;
+          if (filter === "done") return todo.completed;
+          if (filter === "todo") return !todo.completed;
+        })
+        .filter((todo) => {
+          if (priorityFilter === "all") return true;
+          return todo.priority === priorityFilter;
+        })
+    : [];
+
+  const sortedTodos = filteredTodos.sort(
+    (a, b) => Number(a.completed) - Number(b.completed),
+  );
+
   if (error) {
     return <p>{error}</p>;
   }
@@ -99,10 +127,6 @@ const TodoPage = ({ params }: TodoPageProps) => {
       </div>
     );
   }
-
-  const sortedTodos = todoList.todos.sort(
-    (a, b) => Number(a.completed) - Number(b.completed),
-  );
 
   return (
     <>
@@ -139,6 +163,42 @@ const TodoPage = ({ params }: TodoPageProps) => {
           setIsEditing={setIsEditing}
         />
         <div className="flex w-full flex-col p-3 md:p-5">
+          {/* filter wrapper */}
+          <div className="flex items-center justify-start gap-5">
+            {/* status filter */}
+            <div className="mb-4">
+              <label htmlFor="filter" className="mr-2">
+                Status:
+              </label>
+              <select
+                id="filter"
+                value={filter}
+                onChange={handleFilterChange}
+                className="rounded border border-gray-300 px-2 py-1"
+              >
+                <option value="all">All</option>
+                <option value="done">Done</option>
+                <option value="todo">Todo</option>
+              </select>
+            </div>
+            {/* priority filter */}
+            <div className="mb-4">
+              <label htmlFor="priority-filter" className="mr-2">
+                Priority:
+              </label>
+              <select
+                id="priority-filter"
+                value={priorityFilter}
+                onChange={handlePriorityFilterChange}
+                className="rounded border border-gray-300 px-2 py-1"
+              >
+                <option value="all">All</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+          </div>
           {sortedTodos.length === 0 ? (
             <div className="mb-16 flex h-full items-center justify-center text-xl font-bold md:text-3xl lg:text-5xl">
               No todos listed.{" "}
