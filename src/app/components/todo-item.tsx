@@ -1,29 +1,41 @@
 import { Todo } from '@/types/todos';
 import { Pencil, Trash2 } from 'lucide-react';
+import { CSSProperties } from 'react';
+import { HashLoader } from 'react-spinners';
 
 interface TodoItemProps {
   todo: Todo;
   onToggleCompleted: (todoId: string, completed: boolean) => void;
   onDeleteTodo: (todoId: string) => void;
   onEditTodo: (todo: Todo) => void;
-  loadingNewTodo: boolean;
+  isLoading: boolean;
 }
+
+const override: CSSProperties = {
+  display: 'block',
+  margin: '0 auto',
+  padding: '34px 0',
+};
 
 const TodoItem = ({
   todo,
   onToggleCompleted,
   onDeleteTodo,
   onEditTodo,
-  loadingNewTodo,
+  isLoading,
 }: TodoItemProps) => {
   return (
-    <li className='border-b border-gray-500 p-4'>
-      {loadingNewTodo && (
-        <div className='animate-pulse bg-gray-200 h-6'>
-          Creating new Todo...
+    <li
+      className={`${
+        isLoading ? 'border-b-0' : 'border-b'
+      }  border-gray-500 p-4`}
+    >
+      {isLoading && (
+        <div className='flex w-full h-full flex-1'>
+          <HashLoader size={30} cssOverride={override} loading={isLoading} />
         </div>
       )}
-      {!loadingNewTodo && (
+      {!isLoading && (
         <div className='flex items-center justify-between'>
           <div className='flex items-center gap-2'>
             <input

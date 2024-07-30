@@ -11,7 +11,7 @@ export default async function Home() {
   return (
     <main className='flex min-h-screen w-full max-w-7xl mx-auto flex-col gap-10 items-center justify-start p-12'>
       <div className='flex w-full justify-between'>
-        <h1>Hello</h1>
+        <h1 className='text-5xl font-semibold'>My todo lists.</h1>
         <CreateNewListButton />
       </div>
       <div className='grid grid-cols-1 w-full md:grid-cols-2 lg:grid-cols-4 gap-5'>

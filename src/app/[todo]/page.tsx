@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { CSSProperties, useEffect, useState } from 'react';
 import CreateNewTodoForm from '../components/create-new-todo-form';
 import TodoItem from '../components/todo-item';
 import Link from 'next/link';
@@ -8,15 +8,21 @@ import { Todo, TodoList } from '@/types/todos';
 import { getTodoListWithTodos } from '../data-access/get-todo-list-with-todos';
 import { deleteTodo } from '../data-access/delete-todo';
 import { updateTodoCompleted } from '../data-access/todo-completed-state';
+import { HashLoader } from 'react-spinners';
 
 interface TodoPageProps {
   params: { todo: string };
 }
 
+const override: CSSProperties = {
+  display: 'block',
+  margin: '0 auto',
+};
+
 const TodoPage = ({ params }: TodoPageProps) => {
   const { todo } = params;
   const [todoList, setTodoList] = useState<TodoList | null>(null);
-  const [loadingNewTodo, setLoadingNewTodo] = useState<boolean>(false);
+  const [loadingTodoId, setLoadingTodoId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -38,19 +44,24 @@ const TodoPage = ({ params }: TodoPageProps) => {
     fetchTodoList();
   }, [todo]);
 
-  const handleTodoCreatedOrUpdated = async () => {
-    setLoadingNewTodo(true);
+  const handleTodoCreatedOrUpdated = async (todoId?: string) => {
+    if (todoId) {
+      setLoadingTodoId(todoId);
+    }
     await fetchTodoList();
-    setLoadingNewTodo(false);
+    setLoadingTodoId(null);
     setEditingTodo(null);
   };
 
   const handleToggleCompleted = async (todoId: string, completed: boolean) => {
     try {
+      setLoadingTodoId(todoId);
       await updateTodoCompleted(todoId, completed);
-      fetchTodoList();
+      await fetchTodoList();
     } catch (err) {
       setError('Failed to update todo.');
+    } finally {
+      setLoadingTodoId(null);
     }
   };
 
@@ -61,10 +72,13 @@ const TodoPage = ({ params }: TodoPageProps) => {
 
   const handleDeleteTodo = async (todoId: string) => {
     try {
+      setLoadingTodoId(todoId);
       await deleteTodo(todoId);
-      fetchTodoList();
+      await fetchTodoList();
     } catch (error) {
       setError('Failed to delete todo.');
+    } finally {
+      setLoadingTodoId(null);
     }
   };
 
@@ -75,7 +89,7 @@ const TodoPage = ({ params }: TodoPageProps) => {
   if (!todoList) {
     return (
       <div className='min-h-screen w-full flex items-center justify-center'>
-        Loading...
+        <HashLoader size={60} cssOverride={override} />
       </div>
     );
   }
@@ -117,7 +131,7 @@ const TodoPage = ({ params }: TodoPageProps) => {
                   onToggleCompleted={handleToggleCompleted}
                   onDeleteTodo={handleDeleteTodo}
                   onEditTodo={handleEditTodo}
-                  loadingNewTodo={loadingNewTodo}
+                  isLoading={loadingTodoId === todo.id}
                 />
               ))}
             </ul>

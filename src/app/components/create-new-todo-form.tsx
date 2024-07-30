@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { Todo } from '@/types/todos';
 
 interface CreateNewTodoFormProps {
@@ -18,49 +18,78 @@ const CreateNewTodoForm = ({
   isEditing,
   setIsEditing,
 }: CreateNewTodoFormProps) => {
-  const [name, setName] = useState('');
-  const [completed, setCompleted] = useState(false);
-  const [priority, setPriority] = useState(1);
-  const [dueDate, setDueDate] = useState<string | null>(null);
-  const [tags, setTags] = useState<string[]>([]);
+  const [formData, setFormData] = useState({
+    name: '',
+    completed: false,
+    priority: 1,
+    dueDate: '' as string,
+    tags: [] as string[],
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (isEditing && editingTodo) {
-      setName(editingTodo.name);
-      setCompleted(editingTodo.completed);
-      setPriority(editingTodo.priority);
-      setDueDate(
-        editingTodo.dueDate
+      setFormData({
+        name: editingTodo.name,
+        completed: editingTodo.completed,
+        priority: editingTodo.priority,
+        dueDate: editingTodo.dueDate
           ? new Date(editingTodo.dueDate).toISOString().split('T')[0]
-          : null
-      );
-      setTags(editingTodo.tags);
+          : '',
+        tags: editingTodo.tags,
+      });
     } else {
       resetForm();
     }
   }, [isEditing, editingTodo]);
 
   const resetForm = () => {
-    setName('');
-    setCompleted(false);
-    setPriority(1);
-    setDueDate(null);
-    setTags([]);
+    setFormData({
+      name: '',
+      completed: false,
+      priority: 1,
+      dueDate: '',
+      tags: [],
+    });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value, type, checked } = e.target as HTMLInputElement;
+
+    if (type === 'checkbox') {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: checked,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleTagsChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      tags: e.target.value.split(',').map((tag) => tag.trim()),
+    }));
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
 
     const newTodo = {
-      name,
-      completed,
-      priority,
-      dueDate: dueDate ? new Date(dueDate) : null,
-      tags,
+      name: formData.name,
+      completed: formData.completed,
+      priority: formData.priority,
+      dueDate: formData.dueDate ? new Date(formData.dueDate) : null,
+      tags: formData.tags,
     };
 
     try {
@@ -101,7 +130,7 @@ const CreateNewTodoForm = ({
         }
 
         const result = await response.json();
-        onTodoCreatedOrUpdated(result.id);
+        onTodoCreatedOrUpdated(result.id); // Pass ID of created todo
         resetForm();
       }
     } catch (error) {
@@ -127,8 +156,8 @@ const CreateNewTodoForm = ({
           name='name'
           id='name'
           placeholder='Name'
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={formData.name}
+          onChange={handleChange}
           required
           disabled={isSubmitting}
         />
@@ -136,8 +165,8 @@ const CreateNewTodoForm = ({
         <select
           name='completed'
           id='completed'
-          value={completed.toString()}
-          onChange={(e) => setCompleted(e.target.value === 'true')}
+          value={formData.completed.toString()}
+          onChange={handleChange}
           disabled={isSubmitting}
           className={`border border-green-300 px-2 py-1 ${
             isSubmitting ? 'bg-gray-200' : ''
@@ -155,8 +184,8 @@ const CreateNewTodoForm = ({
           name='priority'
           id='priority'
           placeholder='Priority'
-          value={priority}
-          onChange={(e) => setPriority(parseInt(e.target.value, 10))}
+          value={formData.priority}
+          onChange={handleChange}
           required
           disabled={isSubmitting}
         />
@@ -167,8 +196,8 @@ const CreateNewTodoForm = ({
           }`}
           type='date'
           name='dueDate'
-          value={dueDate ?? ''}
-          onChange={(e) => setDueDate(e.target.value)}
+          value={formData.dueDate}
+          onChange={handleChange}
           disabled={isSubmitting}
         />
         <label htmlFor='tags'>Tags (comma separated)</label>
@@ -180,10 +209,8 @@ const CreateNewTodoForm = ({
           name='tags'
           id='tags'
           placeholder='Tags'
-          value={tags.join(', ')}
-          onChange={(e) =>
-            setTags(e.target.value.split(',').map((tag) => tag.trim()))
-          }
+          value={formData.tags.join(', ')}
+          onChange={handleTagsChange}
           disabled={isSubmitting}
         />
         <button
