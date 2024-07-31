@@ -29,6 +29,7 @@ const TodoPage = ({ params }: TodoPageProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [filter, setFilter] = useState<string>("all");
   const [priorityFilter, setPriorityFilter] = useState<string>("all");
+  const [formVisible, setFormVisible] = useState<boolean>(true);
 
   const fetchTodoList = async () => {
     try {
@@ -46,6 +47,24 @@ const TodoPage = ({ params }: TodoPageProps) => {
   useEffect(() => {
     fetchTodoList();
   }, [todo]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 767) {
+        setFormVisible(true);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    if (window.innerWidth > 767) {
+      setFormVisible(true);
+    }
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const handleTodoCreatedOrUpdated = async (todoId?: string) => {
     if (todoId) {
@@ -151,17 +170,33 @@ const TodoPage = ({ params }: TodoPageProps) => {
           >
             <Trash2 />
           </button>
+          <div className="w-full md:hidden">
+            <button
+              onClick={() => setFormVisible(!formVisible)}
+              className="rounded-lg bg-blue-300 px-4 py-2 text-lg font-medium duration-100 ease-in hover:scale-105"
+            >
+              {formVisible ? "Hide Form" : "Show Form"}
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="mx-auto mt-5 flex w-full max-w-7xl flex-col gap-2 md:mt-16 md:flex-row md:gap-10">
-        <CreateNewTodoForm
-          todoListId={todoList.id}
-          onTodoCreatedOrUpdated={handleTodoCreatedOrUpdated}
-          editingTodo={editingTodo}
-          isEditing={isEditing}
-          setIsEditing={setIsEditing}
-        />
+      <div className="mx-auto mt-5 flex w-full max-w-7xl flex-col gap-2 md:mt-10 md:flex-row md:gap-5 lg:mt-16 lg:gap-10">
+        <div
+          className={`transition-all duration-700 ease-in-out ${
+            formVisible
+              ? "max-h-screen opacity-100"
+              : "max-h-0 overflow-hidden opacity-0"
+          }`}
+        >
+          <CreateNewTodoForm
+            todoListId={todoList.id}
+            onTodoCreatedOrUpdated={handleTodoCreatedOrUpdated}
+            editingTodo={editingTodo}
+            isEditing={isEditing}
+            setIsEditing={setIsEditing}
+          />
+        </div>
         <div className="flex w-full flex-col p-3 md:p-5">
           {/* filter wrapper */}
           <div className="flex items-center justify-start gap-5">
