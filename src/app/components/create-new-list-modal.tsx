@@ -11,8 +11,6 @@ interface ModalProps {
 const Modal = ({ isOpen, onClose }: ModalProps) => {
   const [error, setError] = useState<string | null>(null);
 
-  if (!isOpen) return null;
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget as HTMLFormElement;
@@ -30,8 +28,17 @@ const Modal = ({ isOpen, onClose }: ModalProps) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-50">
-      <div className="relative rounded-lg bg-white p-6 shadow-lg">
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-50 transition-opacity duration-200 ease-in-out ${
+        isOpen ? "opacity-100" : "opacity-0"
+      }`}
+      style={{ pointerEvents: isOpen ? "auto" : "none" }}
+    >
+      <div
+        className={`relative transform rounded-lg bg-white p-6 shadow-lg transition-transform duration-200 ease-in-out ${
+          isOpen ? "scale-100" : "scale-90"
+        }`}
+      >
         <button
           onClick={onClose}
           className="absolute right-2 top-2 text-gray-600 hover:text-gray-800"
