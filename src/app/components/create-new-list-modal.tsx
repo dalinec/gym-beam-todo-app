@@ -50,7 +50,7 @@ const Modal = ({ isOpen, onClose }: ModalProps) => {
           onSubmit={handleSubmit}
         >
           <div className="flex flex-col gap-3 rounded-lg border border-gray-500 p-5">
-            <label className="font-semibold" htmlFor="name">
+            <label className="font-semibold modalTitle" htmlFor="name">
               Name of the Todo List
             </label>
             <input

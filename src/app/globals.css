@@ -2,20 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
 body {
   @apply bg-slate-200;
 }
@@ -56,4 +42,70 @@ input[type="radio"]:checked + .radio-label-medium {
 }
 input[type="radio"]:checked + .radio-label-high {
   @apply border-red-500 bg-red-300 text-black shadow-md;
+}
+
+body {
+  color: var(--text-color);
+  background-color: var(--background-color);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+body a,
+body button {
+  color: black;
+}
+
+/* Light mode styles */
+.light-mode {
+  --text-color: black;
+  --background-color: #e2e8f0;
+  --border-color: #6b7280;
+}
+
+/* Dark mode styles */
+.dark-mode {
+  --text-color: white;
+  --background-color: #333;
+  --border-color: #0ea5e9;
+}
+
+.light-mode .todolistBorder {
+  @apply border-blue-500 !important;
+}
+
+.light-mode form {
+  @apply text-black;
+}
+
+.dark-mode .radio-label {
+  @apply text-gray-500;
+}
+
+.dark-mode input[type="radio"]:checked + .radio-label-low {
+  @apply border-green-500 bg-green-300 text-black shadow-md;
+}
+.dark-mode input[type="radio"]:checked + .radio-label-medium {
+  @apply border-orange-500 bg-orange-300 text-black shadow-md;
+}
+.dark-mode input[type="radio"]:checked + .radio-label-high {
+  @apply border-red-500 bg-red-300 text-black shadow-md;
+}
+
+.dark-mode input,
+.dark-mode select {
+  @apply text-black;
+}
+
+.dark-mode form {
+  @apply text-white;
+}
+
+.dark-mode .modalTitle {
+  @apply text-black;
+}
+.dark-mode .todoInfo,
+.dark-mode .todoTags {
+  @apply text-gray-200;
 }

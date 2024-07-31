@@ -9,6 +9,7 @@ interface TodoItemProps {
   onDeleteTodo: (todoId: string) => void;
   onEditTodo: (todo: Todo) => void;
   isLoading: boolean;
+  loaderColor: string;
 }
 
 const override: CSSProperties = {
@@ -23,6 +24,7 @@ const TodoItem = ({
   onDeleteTodo,
   onEditTodo,
   isLoading,
+  loaderColor,
 }: TodoItemProps) => {
   return (
     <li
@@ -30,7 +32,12 @@ const TodoItem = ({
     >
       {isLoading && (
         <div className="flex h-full w-full flex-1">
-          <HashLoader size={30} cssOverride={override} loading={isLoading} />
+          <HashLoader
+            size={30}
+            color={loaderColor}
+            cssOverride={override}
+            loading={isLoading}
+          />
         </div>
       )}
       {!isLoading && (
@@ -50,7 +57,7 @@ const TodoItem = ({
               >
                 {todo.name}
               </div>
-              <div className="text-sm text-gray-600">
+              <div className="text-sm todoInfo text-gray-600">
                 Priority:{" "}
                 <span className={`priority-${todo.priority}`}>
                   {todo.priority}
@@ -65,7 +72,7 @@ const TodoItem = ({
                   </span>
                 </span>
               </div>
-              <div className="max-w-[200px] truncate text-ellipsis text-sm text-gray-600 sm:max-w-full">
+              <div className="max-w-[200px] todoTags truncate text-ellipsis text-sm text-gray-600 sm:max-w-full">
                 {todo.tags.length === 1 && todo.tags.includes("") ? (
                   <span>No tags</span>
                 ) : (

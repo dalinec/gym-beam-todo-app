@@ -10,6 +10,7 @@ import { deleteTodo } from "../data-access/delete-todo";
 import { deleteTodoList } from "../data-access/delete-todo-list";
 import { getTodoListWithTodos } from "../data-access/get-todo-list-with-todos";
 import { updateTodoCompleted } from "../data-access/todo-completed-state";
+import ThemeToggle from "../components/theme-toggle";
 
 interface TodoPageProps {
   params: { todo: string };
@@ -30,6 +31,7 @@ const TodoPage = ({ params }: TodoPageProps) => {
   const [filter, setFilter] = useState<string>("all");
   const [priorityFilter, setPriorityFilter] = useState<string>("all");
   const [formVisible, setFormVisible] = useState<boolean>(true);
+  const [loaderColor, setLoaderColor] = useState<string>("#000000");
 
   const fetchTodoList = async () => {
     try {
@@ -131,6 +133,30 @@ const TodoPage = ({ params }: TodoPageProps) => {
         })
     : [];
 
+  useEffect(() => {
+    const updateLoaderColor = () => {
+      const bodyClass = document.body.classList;
+      if (bodyClass.contains("dark-mode")) {
+        setLoaderColor("#ffffff");
+      } else {
+        setLoaderColor("#000000");
+      }
+    };
+
+    updateLoaderColor();
+
+    const observer = new MutationObserver(updateLoaderColor);
+
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   const sortedTodos = filteredTodos.sort(
     (a, b) => Number(a.completed) - Number(b.completed),
   );
@@ -142,7 +168,7 @@ const TodoPage = ({ params }: TodoPageProps) => {
   if (!todoList) {
     return (
       <div className="flex min-h-screen w-full items-center justify-center">
-        <HashLoader size={60} cssOverride={override} />
+        <HashLoader size={60} color={loaderColor} cssOverride={override} />
       </div>
     );
   }
@@ -178,6 +204,7 @@ const TodoPage = ({ params }: TodoPageProps) => {
               {formVisible ? "Hide Form" : "Show Form"}
             </button>
           </div>
+          <ThemeToggle />
         </div>
       </div>
 
@@ -235,11 +262,11 @@ const TodoPage = ({ params }: TodoPageProps) => {
             </div>
           </div>
           {sortedTodos.length === 0 ? (
-            <div className="mb-16 flex h-full items-center justify-center text-xl font-bold md:text-3xl lg:text-5xl">
+            <div className="flex h-full items-center justify-center text-xl font-bold md:mb-16 md:text-3xl lg:text-5xl">
               No todos listed.{" "}
             </div>
           ) : (
-            <ul className="mb-16">
+            <ul className="">
               {sortedTodos.map((todo) => (
                 <TodoItem
                   key={todo.id}
@@ -248,6 +275,7 @@ const TodoPage = ({ params }: TodoPageProps) => {
                   onDeleteTodo={handleDeleteTodo}
                   onEditTodo={handleEditTodo}
                   isLoading={loadingTodoId === todo.id}
+                  loaderColor={loaderColor}
                 />
               ))}
             </ul>
