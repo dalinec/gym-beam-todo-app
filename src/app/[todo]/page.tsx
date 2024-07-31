@@ -199,7 +199,7 @@ const TodoPage = ({ params }: TodoPageProps) => {
         </div>
         <div className="flex w-full flex-col p-3 md:p-5">
           {/* filter wrapper */}
-          <div className="flex items-center justify-start gap-5">
+          <div className="flex items-center justify-start gap-5 pl-2">
             {/* status filter */}
             <div className="mb-4">
               <label htmlFor="filter" className="mr-2">
