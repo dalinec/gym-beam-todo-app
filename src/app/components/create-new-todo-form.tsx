@@ -36,6 +36,14 @@ const CreateNewTodoForm = ({
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   useEffect(() => {
     if (isEditing && editingTodo) {
       setFormData({
@@ -243,6 +251,7 @@ const CreateNewTodoForm = ({
           value={formData.dueDate}
           onChange={handleChange}
           disabled={isSubmitting}
+          min={getTodayDate()}
           required
         />
         <label htmlFor="tags">Tags (comma separated)</label>
