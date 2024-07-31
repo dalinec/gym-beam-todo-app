@@ -28,7 +28,7 @@ export default async function Home() {
             <NotepadText className="size-10" />
           </span>
         </h1>
-        <div className="flex gap-x-2">
+        <div className="flex items-center justify-center gap-x-2">
           <CreateNewListButton />
           <ThemeToggle />
         </div>
